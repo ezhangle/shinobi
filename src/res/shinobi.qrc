@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/" lang="eng" >
+        <file>icon_shinobi.png</file>
+        <file>icon_open.png</file>
+    </qresource>
+</RCC>

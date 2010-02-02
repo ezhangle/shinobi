@@ -5,5 +5,5 @@ DEPENDPATH  += $$PWD
 
 win32: {
   SOURCES += $$PWD/DriveNotificationManager_win.cpp
-  LIBS    += Cfgmgr32.lib Setupapi.lib
+  LIBS    += setupapi.lib
 }

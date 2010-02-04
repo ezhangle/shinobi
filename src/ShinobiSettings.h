@@ -18,8 +18,10 @@ namespace shinobi {
     static QString keyFileFilters ()          { return "file_filters"; }
     static QString keyTargetPath  ()          { return "target_path"; }
     static QString keyHideHotkey  ()          { return "hide_hotkey"; }
+    static QString keyPauseHotkey ()          { return "pause_hotkey"; }
     static QString keyShowPwdHash ()          { return "show_pwd_hash"; }
     static QString keyIconHidden  ()          { return "icon_hidden"; }
+    static QString keyActive      ()          { return "active"; }
     static QString keyHistorySize ()          { return "history_size"; }
     static QString keyHistoryItem (int index) { return "history/item" + QString::number(index); }
   };
@@ -47,6 +49,8 @@ namespace shinobi {
 
       load(keyIconHidden(), mIconHidden, false);
       load(keyHideHotkey(), mHideHotkey, QKeySequence("Ctrl+Alt+Shift+S"));
+      load(keyPauseHotkey(), mPauseHotkey, QKeySequence("Ctrl+Alt+Shift+A"));
+      load(keyActive(), mActive, false);
     }
 
     const QList<DriveFilter> driveFilters() const {
@@ -71,6 +75,14 @@ namespace shinobi {
 
     QKeySequence hideHotkey() const {
       return mHideHotkey;
+    }
+
+    QKeySequence pauseHotkey() const {
+      return mPauseHotkey;
+    }
+
+    bool active() const {
+      return mActive;
     }
 
     void setDriveFilters(const QList<DriveFilter>& driveFilters) {
@@ -109,6 +121,16 @@ namespace shinobi {
       save(keyHideHotkey(), keySequence);
     }
 
+    void setPauseHotkey(QKeySequence keySequence) {
+      mPauseHotkey = keySequence;
+      save(keyPauseHotkey(), keySequence);
+    }
+
+    void setActive(bool active) {
+      mActive = active;
+      save(keyActive(), active);
+    }
+
     QVariant value(const QString& key, const QVariant& defaultValue = QVariant()) const {
       return mSettings->value(key, defaultValue);
     }
@@ -118,6 +140,9 @@ namespace shinobi {
     }
 
   private:
+    ShinobiSettings(const ShinobiSettings&);
+    ShinobiSettings& operator= (const ShinobiSettings&);
+
     template<class T>
     static QVariant variant(const T& value) {
       QVariant result;
@@ -141,8 +166,10 @@ namespace shinobi {
     }
 
     bool mIconHidden;
+    bool mActive;
     QString mTargetPath;
     QKeySequence mHideHotkey;
+    QKeySequence mPauseHotkey;
     QSettings* mSettings;
     QList<DriveFilter> mDriveFilters;
     QList<FileFilter> mFileFilters;

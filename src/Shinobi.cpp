@@ -11,9 +11,9 @@ namespace shinobi {
     assert(settings != NULL);
 
     mTrayIcon = new QSystemTrayIcon(dynamic_cast<QApplication*>(QApplication::instance())->windowIcon(), this);
-    mTrayIcon->setToolTip("shinobi");
     if(!mSettings.iconHidden())
       mTrayIcon->show();
+    updateTrayHint();
     connect(mTrayIcon,      SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this,             SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     
@@ -57,7 +57,9 @@ namespace shinobi {
           return;
 
       WorkerThread* worker = new WorkerThread(path, mSettings.targetPath() + "/" + QDateTime::currentDateTime().toString("yy_MM_dd_hh_mm_ss_zzz"), mSettings.fileFilters());
-      //connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater())); /* We cannot do that. */
+      //connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater())); /* TODO? We cannot do that. */
+      if(!mSettings.active())
+        worker->lock();
       worker->start();
       mWorkers[path] = worker;
     } else {
@@ -66,6 +68,8 @@ namespace shinobi {
       /* Device may have been plugged before Shinobi was started. */
       if(mWorkers.contains(path)) {
         mWorkers[path]->unplug();
+        if(mWorkers[path]->locked())
+          mWorkers[path]->unlock();
         mWorkers.remove(path);
       }
     }
@@ -80,9 +84,26 @@ namespace shinobi {
       mTrayIcon->show();
   }
 
+  void Shinobi::toggleActivity() {
+    bool active = !mSettings.active();
+    mSettings.setActive(active);
+
+    foreach(WorkerThread* worker, mWorkers)
+      active ? worker->unlock() : worker->lock();
+
+    if(active)
+      QApplication::beep();
+
+    updateTrayHint();
+  }
+
   void Shinobi::reassignHotkey() {
     mShortcutManager->clear();
     mShortcutManager->connect(mSettings.hideHotkey(), this, SLOT(toggleIconVisibility()));
+    mShortcutManager->connect(mSettings.pauseHotkey(), this, SLOT(toggleActivity()));
   }
 
+  void Shinobi::updateTrayHint() {
+    mTrayIcon->setToolTip(QString("Shinobi") + (mSettings.active() ? "" : " (paused)"));
+  }
 }

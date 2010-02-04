@@ -29,8 +29,11 @@ namespace shinobi {
     void driveStateChanged(int stateChange, QString path, QString serialNo, QString name);
     void toggleIconVisibility();
     void reassignHotkey();
+    void toggleActivity();
 
   private:
+    void updateTrayHint();
+
     QSystemTrayIcon* mTrayIcon;
     MainWidget* mMainWidget;
     GlobalShortcutManager* mShortcutManager;

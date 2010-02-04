@@ -74,6 +74,7 @@ namespace shinobi {
 
     QLabel* mTargetPath;
     KeySequenceEdit* mHideHotkey;
+    KeySequenceEdit* mPauseHotkey;
 
     QMenu* mHistoryContextMenu;
   };

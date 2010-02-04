@@ -5,6 +5,7 @@
 #include <cassert>
 #include <QThread>
 #include <QDir>
+#include <QMutex>
 #include "FileFilter.h"
 
 namespace shinobi {
@@ -17,7 +18,7 @@ namespace shinobi {
     Q_OBJECT;
   public: 
     WorkerThread(const QString& sourcePath, const QString& targetPath, const QList<FileFilter>& fileFilters): 
-      mPlugged(true), mTargetDir(targetPath), mSourceDir(sourcePath), mFileFilters(fileFilters) {}
+      mPlugged(true), mTargetDir(targetPath), mSourceDir(sourcePath), mFileFilters(fileFilters), mLocked(false) {}
 
     virtual void run();
 
@@ -25,12 +26,32 @@ namespace shinobi {
       mPlugged = false;
     }
 
+    void lock() {
+      assert(!mLocked);
+
+      mMutex.lock();
+      mLocked = true;
+    }
+
+    void unlock() {
+      assert(mLocked);
+
+      mLocked = false;
+      mMutex.unlock();
+    }
+
+    bool locked() const {
+      return mLocked;
+    }
+
   private:
     void copy(const QFileInfo& fileInfo);
 
     void deepCopy(const QFileInfo& fileInfo);
 
+    volatile bool mLocked;
     volatile bool mPlugged;
+    QMutex mMutex;
     QDir mTargetDir;
     QDir mSourceDir;
     QList<FileFilter> mFileFilters;

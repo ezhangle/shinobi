@@ -108,11 +108,18 @@ namespace shinobi {
 
     mHideHotkey = new KeySequenceEdit(mSettings->hideHotkey());
 
+    QLabel* pauseHotkeyLabel = new QLabel("Pause hotkey");
+    pauseHotkeyLabel->setAlignment(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
+
+    mPauseHotkey = new KeySequenceEdit(mSettings->pauseHotkey());
+
     QGridLayout* generalLayout = new QGridLayout();
     generalLayout->addWidget(targetPathLabel,   0, 0);
     generalLayout->addLayout(targetPathLayout,  0, 1);
     generalLayout->addWidget(hideHotkeyLabel,   1, 0);
     generalLayout->addWidget(mHideHotkey,       1, 1);
+    generalLayout->addWidget(pauseHotkeyLabel,  2, 0);
+    generalLayout->addWidget(mPauseHotkey,      2, 1);
 
     QGroupBox *generalGroupBox = new QGroupBox("&General");
     generalGroupBox->setLayout(generalLayout);
@@ -332,6 +339,7 @@ namespace shinobi {
 
     mSettings->setTargetPath(mTargetPath->text());
     mSettings->setHideHotkey(mHideHotkey->keySequence());
+    mSettings->setPauseHotkey(mPauseHotkey->keySequence());
 
     event->accept();
 

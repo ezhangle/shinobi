@@ -32,6 +32,16 @@ namespace shinobi {
       while(!queue.isEmpty()) {
         QFileInfo fileInfo = queue.dequeue();
         
+        /* Lock if has been forced to. */
+        if(mLocked) {
+          mMutex.lock();
+          mMutex.unlock();
+        }
+
+        /* Check unplugged state AFTER lock. */
+        if(!mPlugged)
+          break;
+
         /* Ignore symlinks. */
         if(fileInfo.isSymLink())
           continue;

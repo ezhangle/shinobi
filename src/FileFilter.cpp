@@ -18,11 +18,13 @@ namespace shinobi {
   Qt::CaseSensitivity FileFilter::sFsCaseSensitivity = fsCaseSensitivity();
 
   int FileFilter::registerInQtTypeSystem() {
-    int typeId = qRegisterMetaType<FileFilter>();
+    int typeId = qRegisterMetaType<FileFilter>("FileFilter");
     qRegisterMetaTypeStreamOperators<FileFilter>(QMetaType::typeName(typeId));
-    
-    int listTypeId = qRegisterMetaType<QList<FileFilter> >();
+    qRegisterMetaTypeStreamOperators<FileFilter>(QMetaType::typeName(qMetaTypeId<FileFilter>()));
+
+    int listTypeId = qRegisterMetaType<QList<FileFilter> >("QList<FileFilter>");
     qRegisterMetaTypeStreamOperators<QList<FileFilter> >(QMetaType::typeName(listTypeId));
+    qRegisterMetaTypeStreamOperators<QList<FileFilter> >(QMetaType::typeName(qMetaTypeId<QList<FileFilter> >()));
 
     return typeId;
   }

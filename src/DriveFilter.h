@@ -55,7 +55,7 @@ namespace shinobi {
     static int sQtMetaTypeId;
   };
 
-}
+} // namespace shinobi
 
 Q_DECLARE_METATYPE(::shinobi::DriveFilter);
 Q_DECLARE_METATYPE(QList<::shinobi::DriveFilter>);

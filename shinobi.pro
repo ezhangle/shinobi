@@ -1,7 +1,5 @@
 TEMPLATE  = app
 CONFIG   += qt warn_on
-#CONFIG   += embed_manifest_exe
-#CONFIG   += static
 
 SOURCES = \
   src/DriveFilter.cpp \

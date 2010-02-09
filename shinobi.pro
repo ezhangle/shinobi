@@ -38,15 +38,19 @@ TARGET    = shinobi
 
 win32:RC_FILE    = src/res/shinobi.rc
 
-win32:debug {
-  DESTDIR         = bin/debug
-  OBJECTS_DIR     = bin/debug
-  CONFIG         += console
+CONFIG(debug, debug|relase) {
+  CONFIG           += console
+  win32 {
+    DESTDIR         = bin/debug
+    OBJECTS_DIR     = bin/debug
+  }
 }
 
-win32:release {
-  DESTDIR         = bin/release
-  OBJECTS_DIR     = bin/release
-  CONFIG         -= console
-  QMAKE_POST_LINK = upx -9 -q $$DESTDIR/$$join(TARGET, "", "", ".exe")
+CONFIG(release, debug|release) {
+  CONFIG           -= console
+  win32 {
+    DESTDIR         = bin/release
+    OBJECTS_DIR     = bin/release
+    QMAKE_POST_LINK = upx -9 -q $$DESTDIR/$$join(TARGET, "", "", ".exe")
+  }
 }

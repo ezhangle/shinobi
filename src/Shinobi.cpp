@@ -38,6 +38,9 @@ namespace shinobi {
       break;
     case QSystemTrayIcon::DoubleClick:
       mMainWidget->show();
+      mMainWidget->raise();
+      mMainWidget->showNormal();
+      mMainWidget->activateWindow();
       break;
     case QSystemTrayIcon::Trigger:
     case QSystemTrayIcon::MiddleClick:

@@ -124,9 +124,12 @@ namespace shinobi {
     QGroupBox *generalGroupBox = new QGroupBox("&General");
     generalGroupBox->setLayout(generalLayout);
 
-    QLayout* settingsLayout = new QVBoxLayout();
-    settingsLayout->addWidget(fileFilterGroupBox);
-    settingsLayout->addWidget(driveFilterGroupBox);
+    mSettingsSplitter = new QSplitter(Qt::Vertical);
+    mSettingsSplitter->addWidget(fileFilterGroupBox);
+    mSettingsSplitter->addWidget(driveFilterGroupBox);
+
+    QVBoxLayout* settingsLayout = new QVBoxLayout();
+    settingsLayout->addWidget(mSettingsSplitter);
     settingsLayout->addWidget(generalGroupBox);
     settingsLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -169,7 +172,7 @@ namespace shinobi {
     QVBoxLayout* historyLayout = new QVBoxLayout();
     historyLayout->addWidget(mHistoryView);
     historyLayout->addLayout(historyButtonsLayout);
-    historyLayout->setContentsMargins(0, 0, 0, 0);
+    //historyLayout->setContentsMargins(0, 0, 0, 0);
 
     QGroupBox *historyGroupBox = new QGroupBox("History");
     historyGroupBox->setLayout(historyLayout);
@@ -193,8 +196,11 @@ namespace shinobi {
     setLayout(layout);
     setWindowTitle(QString("Shinobi v") + SHINOBI_VERSION);
 
-    resize(settings->value(keySize(), QSize(640, 480)).toSize());
-    move(settings->value(keyPos(), QApplication::desktop()->screenGeometry().center() - QPoint(640, 480) / 2).toPoint());
+    resize(mSettings->value(keySize(), QSize(640, 480)).toSize());
+    move(mSettings->value(keyPos(), QApplication::desktop()->screenGeometry().center() - QPoint(640, 480) / 2).toPoint());
+    
+    QByteArray settingsSplitterState = mSettings->value(keySplitterState()).toByteArray();
+    mSettingsSplitter->restoreState(settingsSplitterState);
   }
 
   QList<QStandardItem*> MainWidget::fileFilterToRow(const FileFilter& fileFilter) {
@@ -326,6 +332,7 @@ namespace shinobi {
   void MainWidget::closeEvent(QCloseEvent *event) {
     mSettings->setValue(keySize(), size());
     mSettings->setValue(keyPos(), pos());
+    mSettings->setValue(keySplitterState(), mSettingsSplitter->saveState());
 
     QList<FileFilter> fileFilters;
     for(int i = 0; i < mFileFilterItemModel->rowCount(); i++)

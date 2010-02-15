@@ -7,6 +7,7 @@
 #include <QTreeView>
 #include <QLabel>
 #include <QStandardItemModel>
+#include <QSplitter>
 #include "ShinobiSettings.h"
 #include "KeySequenceEdit.h"
 
@@ -18,8 +19,9 @@ namespace shinobi {
 // -------------------------------------------------------------------------- //
   class MainWidgetKeys {
   public:
-    static QString keySize() { return "main_widget/size"; }
-    static QString keyPos () { return "main_widget/position"; }
+    static QString keySize         () { return "main_widget/size"; }
+    static QString keyPos          () { return "main_widget/position"; }
+    static QString keySplitterState() { return "main_widget/splitter_state"; }
   };
 
 
@@ -75,6 +77,8 @@ namespace shinobi {
     QLabel* mTargetPath;
     KeySequenceEdit* mHideHotkey;
     KeySequenceEdit* mPauseHotkey;
+
+    QSplitter* mSettingsSplitter;
 
     QMenu* mHistoryContextMenu;
   };

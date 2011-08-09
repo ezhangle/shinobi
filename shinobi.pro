@@ -38,7 +38,7 @@ TARGET    = shinobi
 
 win32:RC_FILE    = src/res/shinobi.rc
 
-CONFIG(debug, debug|relase) {
+CONFIG(debug, debug|release) {
   CONFIG           += console
   win32 {
     DESTDIR         = bin/debug

@@ -10,6 +10,9 @@ namespace shinobi {
   Shinobi::Shinobi(QSettings* settings): mSettings(settings) {
     assert(settings != NULL);
 
+    if(mSettings.fileFilters().empty())
+      mSettings.setFileFilters(QList<FileFilter>() << FileFilter(FileFilter::Any, QLatin1String("*"), FileFilter::Copy));
+
     mTrayIcon = new QSystemTrayIcon(dynamic_cast<QApplication*>(QApplication::instance())->windowIcon(), this);
     if(!mSettings.iconHidden())
       mTrayIcon->show();

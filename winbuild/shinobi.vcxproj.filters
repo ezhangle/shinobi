@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="shinobi">
+      <UniqueIdentifier>{0b461065-69c8-416c-ade6-a3c3ad3d7aac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shinobi\tools">
+      <UniqueIdentifier>{90e72dfd-5a9d-47ff-b2ca-09b6c8170e47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shinobi\tools\DriveNotification">
+      <UniqueIdentifier>{40af0f22-8a96-4cf0-9c22-d99b58b90cc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project">
+      <UniqueIdentifier>{506332df-bd5b-4c84-8a91-084964bbb1f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{5224b273-f848-4d7b-9430-db7f3282f5f2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\config.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\DriveFilter.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FileFilter.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FileFilterActionDelegate.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FileFilterActionEditor.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\HistoryItem.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\KeySequenceEdit.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MainWidget.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Shinobi.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShinobiSettings.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WorkerThread.h">
+      <Filter>shinobi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tools\DriveNotification\DriveNotificationManager.h">
+      <Filter>shinobi\tools\DriveNotification</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\DriveFilter.cpp">
+      <Filter>shinobi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FileFilter.cpp">
+      <Filter>shinobi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\HistoryItem.cpp">
+      <Filter>shinobi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\KeySequenceEdit.cpp">
+      <Filter>shinobi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>shinobi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MainWidget.cpp">
+      <Filter>shinobi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Shinobi.cpp">
+      <Filter>shinobi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WorkerThread.cpp">
+      <Filter>shinobi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tools\DriveNotification\DriveNotificationManager.cpp">
+      <Filter>shinobi\tools\DriveNotification</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tools\DriveNotification\DriveNotificationManager_win.cpp">
+      <Filter>shinobi\tools\DriveNotification</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\tools\DriveNotification\DriveNotification.pri">
+      <Filter>shinobi\tools\DriveNotification</Filter>
+    </None>
+    <None Include="..\shinobi.pro">
+      <Filter>project</Filter>
+    </None>
+    <None Include="..\src\res\shinobi.qrc">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="..\HISTORY" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\src\res\shinobi.rc">
+      <Filter>resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

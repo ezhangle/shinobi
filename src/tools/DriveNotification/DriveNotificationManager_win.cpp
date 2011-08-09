@@ -58,13 +58,16 @@ private:
     if(logicalDriveMask == mLogicalDriveMask)
       return TRUE;
 
-    DWORD deltaMask = logicalDriveMask ^ mLogicalDriveMask;
-    mLogicalDriveMask = logicalDriveMask;
-
     /* Query device info from the system. */
     QString path, name, serialNo;
     queryDriveParams(pDevInf, path, name, serialNo);
+    if(path.isNull())
+      return TRUE;
 
+    //DWORD deltaMask = logicalDriveMask ^ mLogicalDriveMask;
+    mLogicalDriveMask = logicalDriveMask;
+
+#if 0
     /* In case we got nothing - get at least path. */
     if(path.isEmpty()) {
       for(int i = 0; i < MAX_DRIVES; i++) {
@@ -74,6 +77,7 @@ private:
         }
       }
     }
+#endif
 
     Q_EMIT DriveNotificationManager::sInstance->driveStateChanged(m->wParam == DBT_DEVICEARRIVAL ? Plugged : Unplugged, path, name, serialNo);
     return TRUE;
@@ -94,9 +98,18 @@ private:
   void driveNameAndSerialFromSetupApi(PDEV_BROADCAST_DEVICEINTERFACE pDevInf, QString& driveNameQStr, QString& serialNoQStr) {
     /* Construct device instance id. */
     QString deviceIdQStr = QString::fromWCharArray(pDevInf->dbcc_name);
-    if(!QRegExp("^\\\\\\\\\\?\\\\.*#\\{........-....-....-....-............\\}$").exactMatch(deviceIdQStr))
+
+    QRegExp deviceIdRegExp("^\\\\\\\\\\?\\\\.*#\\{........-....-....-....-............\\}$");
+    if(!deviceIdRegExp.exactMatch(deviceIdQStr))
       return;
-    deviceIdQStr.replace('#', '\\').remove(0, 4).chop(39);
+    
+    /* Remove trailing GUIDs. */
+    do {
+      deviceIdQStr.chop(39);
+    } while(deviceIdRegExp.exactMatch(deviceIdQStr));
+    
+    /* Clean it up so that setup API will understand it. */
+    deviceIdQStr.replace('#', '\\').remove(0, 4);
 
     /* Convert id to WCHAR array. */
     WCHAR deviceId[1024];
@@ -104,20 +117,30 @@ private:
       return;
     deviceId[deviceIdQStr.toWCharArray(deviceId)] = 0;
 
-    /* Get device instance handle of the storage device (STORAGE). */
-    DEVINST devInst;
-    if(CM_Locate_DevNodeW(&devInst, deviceId, CM_LOCATE_DEVNODE_NORMAL) != CR_SUCCESS) 
-      return;
-
-    /* Get parent device instance handle (USBSTOR). */
-    DEVINST parentDevInst;
-    if(CM_Get_Parent(&parentDevInst, devInst, 0) != CR_SUCCESS)
-      return;
-
-    /* Get parent device id. */
+    /* Device id of the USBSTOR node. */
     WCHAR usbStorDeviceId[1024];
-    if(CM_Get_Device_IDW(parentDevInst, usbStorDeviceId, sizeof(usbStorDeviceId) / sizeof(WCHAR), 0) != CR_SUCCESS)
+
+    /* Get device instance handle of the storage device (STORAGE). */
+    if(deviceIdQStr.startsWith("STORAGE")) {
+      DEVINST devInst;
+      if(CM_Locate_DevNodeW(&devInst, deviceId, CM_LOCATE_DEVNODE_NORMAL) != CR_SUCCESS) {
+        return; 
+      } else {
+        /* Get parent device instance handle (USBSTOR). */
+        DEVINST parentDevInst;
+        if(CM_Get_Parent(&parentDevInst, devInst, 0) != CR_SUCCESS) {
+          return;
+        } else {
+          /* Get parent device id. */
+          if(CM_Get_Device_IDW(parentDevInst, usbStorDeviceId, sizeof(usbStorDeviceId) / sizeof(WCHAR), 0) != CR_SUCCESS)
+            return;
+        }
+      }
+    } else if(deviceIdQStr.startsWith("USBSTOR")) {
+      usbStorDeviceId[deviceIdQStr.toWCharArray(usbStorDeviceId)] = 0;
+    } else {
       return;
+    }
 
     /* Convert to QString and extract serial number. */
     QString usbStorDeviceIdQStr = QString::fromWCharArray(usbStorDeviceId);

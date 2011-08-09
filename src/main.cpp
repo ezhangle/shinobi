@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
   app.setQuitOnLastWindowClosed(false);
   app.setWindowIcon(QIcon(":/icon_shinobi.png"));
 
-  QSettings settings("Evil Deeds Inc", "shinobi");
+  QSettings settings("shinobi.ini", QSettings::IniFormat);
   shinobi::Shinobi shinobi(&settings);
   return app.exec();
 }

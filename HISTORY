@@ -1,3 +1,7 @@
+1.0.3
+* Seem to work under Win7.
+* Settings are now stored in ini file.
+
 1.0.2
 * Minor interface tweaks.
 
